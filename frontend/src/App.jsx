@@ -5,13 +5,8 @@ export default function App() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Default dialogue state
-  const defaultDialogue = {
-    name: 'ZACHARY',
-    text: 'SELECT A MODULE OR PLATFORM TO INSPECT.'
-  };
-
-  const [activeDialogue, setActiveDialogue] = useState(defaultDialogue);
+  // Tracks active hover details (null means nothing is hovered)
+  const [activeDialogue, setActiveDialogue] = useState(null);
 
   const navLinks = [
     { name: 'GitHub', url: 'https://github.com/toonkari', text: 'INSPECT SOURCE CODE & COMMIT HISTORY!' },
@@ -38,15 +33,16 @@ export default function App() {
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: '#090d16', 
       color: '#f8fafc', 
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', 
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '4rem 1.5rem 11rem 1.5rem'
+      padding: '4rem 1.5rem 6rem 1.5rem',
+      position: 'relative',
+      zIndex: 1
     }}>
-      
+
       {/* Profile / Hero Section */}
       <div style={{ textAlign: 'center', maxWidth: '600px', marginBottom: '3.5rem' }}>
         <div style={{ 
@@ -77,7 +73,8 @@ export default function App() {
           display: 'inline-flex', 
           alignItems: 'center', 
           gap: '0.5rem', 
-          backgroundColor: '#111827', 
+          backgroundColor: 'rgba(17, 24, 39, 0.8)', 
+          backdropFilter: 'blur(8px)',
           border: '1px solid #1f2937', 
           padding: '0.4rem 0.8rem', 
           borderRadius: '9999px',
@@ -88,7 +85,7 @@ export default function App() {
           <span>Connected to FastAPI Backend</span>
         </div>
 
-        {/* Persona 5 Menu */}
+        {/* Persona 5 Menu (Hover triggers the banner asset & synchronized text overlay) */}
         <nav style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '2.5rem' }}>
           {navLinks.map((link, idx) => (
             <a 
@@ -98,7 +95,7 @@ export default function App() {
               rel="noreferrer"
               className="persona-button"
               onMouseEnter={() => setActiveDialogue({ name: link.name.toUpperCase(), text: link.text })}
-              onMouseLeave={() => setActiveDialogue(defaultDialogue)}
+              onMouseLeave={() => setActiveDialogue(null)}
             >
               {link.name}
             </a>
@@ -108,7 +105,7 @@ export default function App() {
 
       {/* Main Grid / Projects */}
       <main style={{ width: '100%', maxWidth: '700px' }}>
-        <h2 style={{ fontSize: '1.1rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem', fontWeight: '500' }}>
+        <h2 style={{ fontSize: '1.1rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem', fontWeight: '600', textShadow: '1px 1px 2px #000' }}>
           Projects Hub
         </h2>
 
@@ -121,8 +118,6 @@ export default function App() {
                 key={project.id}
                 className="glass-panel"
                 style={{ padding: '1.25rem' }}
-                onMouseEnter={() => setActiveDialogue({ name: project.title.toUpperCase(), text: project.description })}
-                onMouseLeave={() => setActiveDialogue(defaultDialogue)}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                   <h3 style={{ margin: 0, color: '#f3f4f6', fontSize: '1.1rem', fontWeight: '600' }}>{project.title}</h3>
@@ -130,9 +125,9 @@ export default function App() {
                     fontSize: '0.7rem', 
                     padding: '0.15rem 0.5rem', 
                     borderRadius: '9999px', 
-                    backgroundColor: project.status === 'Active' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+                    backgroundColor: project.status === 'Active' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(59, 130, 246, 0.15)',
                     color: project.status === 'Active' ? '#34d399' : '#60a5fa',
-                    border: `1px solid ${project.status === 'Active' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2)'}`
+                    border: `1px solid ${project.status === 'Active' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}`
                   }}>
                     {project.status}
                   </span>
@@ -145,7 +140,7 @@ export default function App() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                   <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap' }}>
                     {project.techStack.map((tech, index) => (
-                      <span key={index} style={{ fontSize: '0.7rem', backgroundColor: '#1f2937', padding: '0.15rem 0.4rem', borderRadius: '4px', color: '#cbd5e1' }}>
+                      <span key={index} style={{ fontSize: '0.7rem', backgroundColor: 'rgba(31, 41, 55, 0.8)', padding: '0.15rem 0.4rem', borderRadius: '4px', color: '#cbd5e1' }}>
                         {tech}
                       </span>
                     ))}
@@ -171,21 +166,29 @@ export default function App() {
         )}
       </main>
 
-      <footer style={{ marginTop: '4rem', color: '#4b5563', fontSize: '0.85rem', display: 'flex', gap: '1.5rem' }}>
+      <footer style={{ marginTop: '4rem', color: '#94a3b8', fontSize: '0.85rem', display: 'flex', gap: '1.5rem', textShadow: '1px 1px 2px #000' }}>
         <a href="https://github.com" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>GitHub</a>
         <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>LinkedIn</a>
       </footer>
 
-      {/* Fixed Persona 5 Bottom Dialogue Box */}
-      <div className="persona-footer-banner">
-        <div className="persona-dialogue-box">
-          <img src="/persona-banner.png" alt="Persona 5 Dialogue Box" />
-          <div className="persona-dialogue-content">
-            <span className="persona-speaker-name">{activeDialogue.name}</span>
-            <p className="persona-dialogue-text">{activeDialogue.text}</p>
+      {/* Full-Screen 1080p Animated Banner Asset */}
+      <img 
+        src="/persona-banner-anim.gif" 
+        alt="" 
+        className={`persona-fullscreen-banner ${activeDialogue ? 'visible' : ''}`} 
+      />
+
+      {/* Synchronized Text Overlay */}
+      {activeDialogue && (
+        <div className="persona-footer-banner">
+          <div className="persona-dialogue-box-container">
+            <div className="persona-dialogue-content">
+              <span className="persona-speaker-name">{activeDialogue.name}</span>
+              <p className="persona-dialogue-text">{activeDialogue.text}</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
     </div>
   );

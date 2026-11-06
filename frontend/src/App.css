@@ -1,81 +1,80 @@
 /* ==========================================
-   1. Dynamic Animations & Glassmorphism
+   Full-Screen 1080p Persona Banner Asset
    ========================================== */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
+.persona-fullscreen-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 9999;
+  pointer-events: none;
+  border: none;
+  outline: none;
+  
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease-in-out;
 }
 
-.glass-panel {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-panel:hover {
-  transform: translateY(-4px) scale(1.01);
-  border-color: rgba(56, 189, 248, 0.4);
-  box-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.15);
-}
-
-.animate-float {
-  animation: float 5s ease-in-out infinite;
+.persona-fullscreen-banner.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ==========================================
-   2. Persona 5 Bottom Dialogue Bar Styling
+   Precise Text Tracking Overlay Layer
    ========================================== */
 .persona-footer-banner {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: 150px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+  height: 100vh;
+  z-index: 10000;
   pointer-events: none;
-  padding-bottom: 1rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4vh;
 }
 
-.persona-dialogue-box {
+.persona-dialogue-box-container {
   position: relative;
-  width: 800px;
+  width: 850px;
   max-width: 90vw;
   height: 120px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  pointer-events: auto;
   transform: rotate(-1deg);
-  filter: drop-shadow(4px 4px 0px rgba(239, 68, 68, 0.9));
-}
-
-.persona-dialogue-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .persona-dialogue-content {
   position: relative;
   z-index: 2;
   width: 100%;
-  padding: 0 4rem 0 6rem;
+  padding: 0 4rem 0 7rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
+  /* Synchronized text entrance matching the banner animation */
+  animation: textSyncFade 0.25s ease 0.12s forwards;
+  opacity: 0;
+}
+
+@keyframes textSyncFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .persona-speaker-name {
@@ -105,7 +104,7 @@
 }
 
 /* ==========================================
-   3. Persona 5 Nav Buttons
+   Persona 5 Nav Buttons & Glassmorphism
    ========================================== */
 .persona-button {
   color: #f8fafc;
@@ -115,9 +114,10 @@
   letter-spacing: 0.05em;
   padding: 0.55rem 1.1rem;
   border-radius: 8px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: inline-block;
+  backdrop-filter: blur(8px);
   transition: all 0.2s ease;
 }
 
@@ -129,8 +129,32 @@
   box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.glass-panel {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.15);
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
 /* ==========================================
-   4. Layout Extras
+   Additional Layout Helpers
    ========================================== */
 .counter {
   font-size: 16px;
