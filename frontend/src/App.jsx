@@ -1,10 +1,27 @@
 import { useState, useEffect } from 'react';
+import './App.css';
 
 export default function App() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch projects from your FastAPI backend when the page loads
+  // Default dialogue state
+  const defaultDialogue = {
+    name: 'ZACHARY',
+    text: 'SELECT A MODULE OR PLATFORM TO INSPECT.'
+  };
+
+  const [activeDialogue, setActiveDialogue] = useState(defaultDialogue);
+
+  const navLinks = [
+    { name: 'GitHub', url: 'https://github.com/toonkari', text: 'INSPECT SOURCE CODE & COMMIT HISTORY!' },
+    { name: 'Instagram', url: 'https://instagram.com/teominhh', text: 'VISUAL REPOSITORY & CREATIVE SHOTS.' },
+    { name: 'TikTok', url: 'https://tiktok.com/@teominhh', text: 'Add me mud.' },
+    { name: 'LinkedIn', url: 'https://linkedin.com', text: 'CONNECT FOR PROFESSIONAL NETWORK.' },
+    { name: 'Cobalt', url: '#', text: 'SYSTEM ENGINE & UTILITY MODULE.' }
+  ];
+
+  // Fetch projects from backend
   useEffect(() => {
     fetch('http://localhost:8000/api/projects')
       .then((res) => res.json())
@@ -27,11 +44,11 @@ export default function App() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '4rem 1.5rem' 
+      padding: '4rem 1.5rem 11rem 1.5rem'
     }}>
       
       {/* Profile / Hero Section */}
-      <div style={{ textAlign: 'center', maxWidth: '600px', marginBottom: '3rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '600px', marginBottom: '3.5rem' }}>
         <div style={{ 
           width: '80px', 
           height: '80px', 
@@ -70,6 +87,23 @@ export default function App() {
           <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px #10b981' }}></span>
           <span>Connected to FastAPI Backend</span>
         </div>
+
+        {/* Persona 5 Menu */}
+        <nav style={{ display: 'flex', gap: '1.2rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '2.5rem' }}>
+          {navLinks.map((link, idx) => (
+            <a 
+              key={idx}
+              href={link.url}
+              target="_blank" 
+              rel="noreferrer"
+              className="persona-button"
+              onMouseEnter={() => setActiveDialogue({ name: link.name.toUpperCase(), text: link.text })}
+              onMouseLeave={() => setActiveDialogue(defaultDialogue)}
+            >
+              {link.name}
+            </a>
+          ))}
+        </nav>
       </div>
 
       {/* Main Grid / Projects */}
@@ -85,12 +119,10 @@ export default function App() {
             {projects.map((project) => (
               <div 
                 key={project.id}
-                style={{
-                  backgroundColor: '#111827',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  border: '1px solid #1f2937',
-                }}
+                className="glass-panel"
+                style={{ padding: '1.25rem' }}
+                onMouseEnter={() => setActiveDialogue({ name: project.title.toUpperCase(), text: project.description })}
+                onMouseLeave={() => setActiveDialogue(defaultDialogue)}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
                   <h3 style={{ margin: 0, color: '#f3f4f6', fontSize: '1.1rem', fontWeight: '600' }}>{project.title}</h3>
@@ -100,7 +132,7 @@ export default function App() {
                     borderRadius: '9999px', 
                     backgroundColor: project.status === 'Active' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(59, 130, 246, 0.1)',
                     color: project.status === 'Active' ? '#34d399' : '#60a5fa',
-                    border: `1px solid ${project.status === 'Active' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2'}`
+                    border: `1px solid ${project.status === 'Active' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(59, 130, 246, 0.2)'}`
                   }}>
                     {project.status}
                   </span>
@@ -143,6 +175,18 @@ export default function App() {
         <a href="https://github.com" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>GitHub</a>
         <a href="https://linkedin.com" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>LinkedIn</a>
       </footer>
+
+      {/* Fixed Persona 5 Bottom Dialogue Box */}
+      <div className="persona-footer-banner">
+        <div className="persona-dialogue-box">
+          <img src="/persona-banner.png" alt="Persona 5 Dialogue Box" />
+          <div className="persona-dialogue-content">
+            <span className="persona-speaker-name">{activeDialogue.name}</span>
+            <p className="persona-dialogue-text">{activeDialogue.text}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
